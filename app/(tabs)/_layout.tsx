@@ -1,37 +1,65 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Colors } from "@/constants/Colors";
+import { AuthContext } from "@/store/auth-context";
+import { Ionicons } from "@expo/vector-icons";
+import { Redirect, Tabs } from "expo-router";
+import { useContext } from "react";
+import { View, Text, StyleSheet } from "react-native";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+function _layout() {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  if (!isAuthenticated) return <Redirect href="/login" />;
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        tabBarActiveTintColor: "#FFD700",
+        tabBarInactiveBackgroundColor: Colors.dark.text,
+        tabBarActiveBackgroundColor: "#000",
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} size={size} name="home" />
+          ),
+          headerTintColor: "gold",
+          headerRight: ({ tintColor }) => (
+            <Ionicons
+              name="exit"
+              color={tintColor}
+              size={24}
+              onPress={logout}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="account"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} size={size} name="cash-outline" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="shipment"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} size={size} name="bus" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="wallet"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} size={size} name="wallet" />
           ),
         }}
       />
     </Tabs>
   );
 }
+const styles = StyleSheet.create({});
+
+export default _layout;
