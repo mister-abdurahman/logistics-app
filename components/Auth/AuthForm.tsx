@@ -37,7 +37,7 @@ function AuthForm({ isLogin }: Props) {
   async function onSubmit(data: dataProp) {
     try {
       setIsLoading(true);
-      const token = isLogin
+      const { token, expiresIn } = isLogin
         ? await loginUser({
             email: data.email,
             password: data.password,
@@ -46,7 +46,7 @@ function AuthForm({ isLogin }: Props) {
             email: data.email,
             password: data.password,
           });
-      authenticate(token);
+      authenticate({ token, expTime: expiresIn });
       router.replace("home");
     } catch (error) {
       console.log("catch block:", error);

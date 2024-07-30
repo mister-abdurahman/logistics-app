@@ -17,8 +17,8 @@ export async function createUser({
       password,
       returnSecureToken: true,
     });
-    const token = response.data.idToken;
-    return token;
+    // const token = response.data.idToken;
+    return { token: response.data.idToken, expiresIn: response.data.expiresIn };
   } catch (error) {
     console.log(error);
   }
@@ -39,8 +39,7 @@ export async function loginUser({
         returnSecureToken: true,
       }
     );
-    const token = response.data.idToken;
-    return token;
+    return { token: response.data.idToken, expiresIn: response.data.expiresIn };
   } catch (error) {
     throw new Error(error?.message || error?.AxiosError);
   }

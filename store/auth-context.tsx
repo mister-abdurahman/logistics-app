@@ -3,13 +3,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AuthProp {
   token: string | null;
+  tokenExpTime: number | null;
   isAuthenticated: boolean;
-  authenticate: (token: string) => void;
+  authenticate: ({
+    token,
+    expTime,
+  }: {
+    token: string;
+    expTime: number;
+  }) => void;
   logout: () => void;
 }
 
 const initialState = {
   token: "",
+  tokenExpTime: null,
   isAuthenticated: false,
   authenticate: () => null,
   logout: () => null,
@@ -19,6 +27,7 @@ export const AuthContext = createContext<AuthProp>(initialState);
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [tokenExpTime, setTokenExpTime] = useState<number | null>(null);
 
   useEffect(function () {
     async function fetchToken() {
@@ -29,12 +38,23 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     fetchToken();
   }, []);
 
-  function authenticate(token: string) {
+  function authenticate({
+    token,
+    expTime,
+  }: {
+    token: string;
+    expTime: number;
+  }) {
     setAuthToken(token);
+    setTokenExpTime(expTime);
     AsyncStorage.setItem("token", token);
+    AsyncStorage.setItem("tokenExpiryTime", `${expTime}`);
   }
   function logout() {
     setAuthToken(null);
+    setTokenExpTime(null);
+    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("tokenExpiryTime");
   }
 
   return (
@@ -44,6 +64,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!authToken,
         logout,
         token: authToken,
+        tokenExpTime,
       }}
     >
       {children}
