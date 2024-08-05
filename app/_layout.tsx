@@ -11,6 +11,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthContextProvider } from "@/store/auth-context";
+import { MillianColors } from "@/constants/Colors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,9 +35,14 @@ export default function RootLayout() {
   return (
     <AuthContextProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: "red" },
+          }}
+        >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="shipment" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
