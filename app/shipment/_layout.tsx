@@ -1,9 +1,14 @@
+import { MillianColors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 
 function ScheduleLayout() {
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: MillianColors.primary700 },
+      }}
+    >
       <Stack.Screen
         name="create"
         options={{
