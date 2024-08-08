@@ -1,17 +1,19 @@
 import ImagePicker from "@/components/Shipment/ImagePicker";
+import LocationPicker from "@/components/Shipment/LocationPicker";
 import { Colors, MillianColors } from "@/constants/Colors";
 import { useEffect } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 
 function create() {
   return (
-    <View style={styles.form}>
+    <ScrollView style={styles.form}>
       <View style={styles.inputBox}>
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.input} />
       </View>
       <ImagePicker />
-    </View>
+      <LocationPicker />
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

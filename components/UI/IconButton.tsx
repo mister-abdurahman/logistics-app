@@ -5,7 +5,7 @@ interface Props {
   icon: any;
   color: string;
   size: number;
-  onPress: () => void;
+  onPress?: () => void;
 }
 function IconButton({ icon, color, size, onPress }: Props) {
   return (
