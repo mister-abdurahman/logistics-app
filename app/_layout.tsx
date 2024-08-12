@@ -37,12 +37,13 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: MillianColors.primary700 },
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="shipment" options={{ headerShown: false }} />
+          <Stack.Screen name="map" options={{ title: "Map" }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>

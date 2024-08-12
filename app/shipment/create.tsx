@@ -1,10 +1,13 @@
 import ImagePicker from "@/components/Shipment/ImagePicker";
 import LocationPicker from "@/components/Shipment/LocationPicker";
 import { Colors, MillianColors } from "@/constants/Colors";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 
 function create() {
+  const { longitude, latitude } = useLocalSearchParams();
+  // console.log(longitude, latitude);
   return (
     <ScrollView style={styles.form}>
       <View style={styles.inputBox}>
