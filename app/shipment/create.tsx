@@ -1,21 +1,48 @@
 import ImagePicker from "@/components/Shipment/ImagePicker";
 import LocationPicker from "@/components/Shipment/LocationPicker";
+import Button from "@/components/UI/Button";
+import FlatButton from "@/components/UI/FlatButton";
 import { Colors, MillianColors } from "@/constants/Colors";
 import { Link, useLocalSearchParams } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 
 function create() {
-  const { longitude, latitude } = useLocalSearchParams();
-  // console.log(longitude, latitude);
+  const [location, setLocation] = useState<null | {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }>(null);
+  const [pickedImage, setPickedImage] = useState<null | string>(null);
+  const [title, setTitle] = useState<string>("");
+
+  function createShipment() {
+    console.log(location);
+    console.log(pickedImage);
+    console.log(title);
+  }
   return (
     <ScrollView style={styles.form}>
       <View style={styles.inputBox}>
         <Text style={styles.label}>Title</Text>
-        <TextInput style={styles.input} />
+        <TextInput
+          style={styles.input}
+          value={title}
+          onChangeText={(val) => setTitle(val)}
+        />
       </View>
-      <ImagePicker />
-      <LocationPicker />
+      <ImagePicker pickedImage={pickedImage} setPickedImage={setPickedImage} />
+      <LocationPicker location={location} setLocation={setLocation} />
+      <Button
+        containerStyle={{
+          backgroundColor: MillianColors.primary400,
+          marginTop: 8,
+        }}
+        btnTextStyle={{ color: "#000" }}
+        onPress={createShipment}
+      >
+        Create
+      </Button>
     </ScrollView>
   );
 }

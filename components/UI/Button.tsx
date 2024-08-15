@@ -6,15 +6,21 @@ import { ReactNode } from "react";
 interface Props {
   children: ReactNode;
   onPress: () => void;
+  containerStyle?: object;
+  btnTextStyle?: object;
 }
-function Button({ children, onPress }: Props) {
+function Button({ children, onPress, containerStyle, btnTextStyle }: Props) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.button,
+        containerStyle,
+        pressed && styles.pressed,
+      ]}
       onPress={onPress}
     >
       <View>
-        <Text style={styles.buttonText}>{children}</Text>
+        <Text style={[styles.buttonText, btnTextStyle]}>{children}</Text>
       </View>
     </Pressable>
   );

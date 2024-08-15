@@ -5,31 +5,61 @@ import {
   getCurrentPositionAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { getMapPreview } from "@/utils/location";
-import { router } from "expo-router";
+import { getLocationAddress, getMapPreview } from "@/utils/location";
+import { router, useLocalSearchParams } from "expo-router";
 
 // api_key: AIzaSyBOhfL3k4Go30mA1hvz4BdfthJASS6q4XU
 
-function LocationPicker() {
-  const [location, setLocation] = useState<null | {
-    latitude: number;
-    longitude: number;
-    latitudeDelta?: number;
-    longitudeDelta?: number;
-  }>(null);
+function LocationPicker({
+  location,
+  setLocation,
+}: {
+  location: { latitude: number; longitude: number; address: string } | null;
+  setLocation: Dispatch<
+    SetStateAction<null | {
+      latitude: number;
+      longitude: number;
+      address: string;
+    }>
+  >;
+}) {
+  const { longitude: mapLon, latitude: mapLat } = useLocalSearchParams();
+
+  useEffect(
+    function () {
+      async function setLocationState() {
+        if (mapLon && mapLat) {
+          const address = await getLocationAddress({
+            lat: +mapLat,
+            lon: +mapLon,
+          });
+          setLocation({
+            latitude: +mapLat,
+            longitude: +mapLon,
+            address: address || "",
+          });
+        }
+      }
+      setLocationState();
+    },
+    [mapLon, mapLat]
+  );
 
   async function getLocation() {
     let { status } = await requestForegroundPermissionsAsync();
     if (status !== "granted")
       return Alert.alert("Permission to access location was denied");
     const selected_location = await getCurrentPositionAsync();
+    const address = await getLocationAddress({
+      lat: selected_location.coords.latitude,
+      lon: selected_location.coords.longitude,
+    });
     setLocation({
       latitude: selected_location.coords.latitude,
       longitude: selected_location.coords.longitude,
-      latitudeDelta: -1,
-      longitudeDelta: -1,
+      address: address || "",
     });
   }
 
@@ -57,8 +87,6 @@ function LocationPicker() {
                 location || {
                   latitude: 0,
                   longitude: 0,
-                  latitudeDelta: 0.000005,
-                  longitudeDelta: 0.000005,
                 }
               }
             />

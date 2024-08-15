@@ -1,6 +1,6 @@
 import IconButton from "@/components/UI/IconButton";
 import { router, useNavigation } from "expo-router";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert, Button } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
@@ -9,8 +9,6 @@ function map() {
     lat: number;
     lng: number;
   }>(null);
-
-  const [tester, setTester] = useState(false);
 
   const navigation = useNavigation();
 
@@ -21,59 +19,36 @@ function map() {
     setSelectedLocation({ lat, lng });
   }
 
-  //   const saveSelectedHandler = useCallback(
-  //     function () {
-  //       if (!selectedLocation) {
-  //         Alert.alert("Not so fast", "No Location selected yet!");
-  //         return;
-  //       }
-
-  //       router.navigate({
-  //         pathname: "/shipment/create",
-  //         params: {
-  //           latitude: selectedLocation.lat,
-  //           longitude: selectedLocation.lng,
-  //         },
-  //       });
-  //     },
-  //     [selectedLocation, setSelectedLocation]
-  //   );
-  console.log("outside:", selectedLocation);
-
-  function saveSelectedHandler() {
-    console.log("inside save fn:", selectedLocation);
-    if (selectedLocation) {
-      alert("true");
-    } else {
-      alert("false");
+  const saveSelectedHandler = useCallback(() => {
+    if (!selectedLocation) {
+      Alert.alert("Not so fast", "No Location selected yet!");
+      return;
     }
-    // if (!selectedLocation) {
-    //   Alert.alert("Not so fast", "No Location selected yet!");
-    //   return;
-    // }
 
-    // router.navigate({
-    //   pathname: "/shipment/create",
-    //   params: {
-    //     latitude: selectedLocation.lat,
-    //     longitude: selectedLocation.lng,
-    //   },
-    // });
-  }
-
-  useLayoutEffect(function () {
-    navigation.setOptions({
-      headerRight: () => (
-        <IconButton
-          size={24}
-          color="#fff"
-          icon={"save"}
-          // onPress={() => setTester((prev) => !prev)}
-          onPress={saveSelectedHandler}
-        />
-      ),
+    router.navigate({
+      pathname: "/shipment/create",
+      params: {
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+      },
     });
-  }, []);
+  }, [navigation, selectedLocation]);
+
+  useEffect(
+    function () {
+      navigation.setOptions({
+        headerRight: ({ tintColor }: { tintColor: string }) => (
+          <IconButton
+            size={24}
+            color={tintColor}
+            icon={"save"}
+            onPress={saveSelectedHandler}
+          />
+        ),
+      });
+    },
+    [navigation, saveSelectedHandler]
+  );
 
   return (
     <View style={styles.container}>

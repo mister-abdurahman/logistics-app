@@ -4,14 +4,19 @@ import {
   useCameraPermissions,
   PermissionStatus,
 } from "expo-image-picker";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { View, Text, StyleSheet, Button, Alert, Image } from "react-native";
 import OutlineButton from "../UI/OutlineButton";
 import IconButton from "../UI/IconButton";
 
-function ImagePicker() {
+function ImagePicker({
+  pickedImage,
+  setPickedImage,
+}: {
+  pickedImage: null | string;
+  setPickedImage: Dispatch<SetStateAction<string | null>>;
+}) {
   const [status, requestPermission] = useCameraPermissions();
-  const [pickedImage, setPickedImage] = useState<null | string>(null);
 
   async function verifyPermissions() {
     if (status?.status === PermissionStatus.UNDETERMINED) {
