@@ -3,23 +3,28 @@ import LocationPicker from "@/components/Shipment/LocationPicker";
 import Button from "@/components/UI/Button";
 import FlatButton from "@/components/UI/FlatButton";
 import { Colors, MillianColors } from "@/constants/Colors";
+import { Shipment } from "@/data/model";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 
 function create() {
   const [location, setLocation] = useState<null | {
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
     address: string;
   }>(null);
   const [pickedImage, setPickedImage] = useState<null | string>(null);
   const [title, setTitle] = useState<string>("");
 
   function createShipment() {
-    console.log(location);
-    console.log(pickedImage);
-    console.log(title);
+    if (!pickedImage || !location || !title) return;
+    const newShipment = new Shipment({
+      title,
+      imageUri: pickedImage,
+      location,
+    });
+    console.log(newShipment);
   }
   return (
     <ScrollView style={styles.form}>

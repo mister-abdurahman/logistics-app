@@ -1,19 +1,22 @@
 export class Shipment {
-  itemName: string;
+  title: string;
   imageUri: string;
   address: string;
   location: { lat: number; lng: number };
   id: string;
-  constructor(
-    itemName: string,
-    imageUri: string,
-    address: string,
-    location: { lat: number; lng: number }
-  ) {
-    this.itemName = itemName;
+  constructor({
+    title,
+    imageUri,
+    location,
+  }: {
+    title: string;
+    imageUri: string;
+    location: { lat: number; lng: number; address: string };
+  }) {
+    this.title = title;
     this.imageUri = imageUri;
-    this.address = address;
-    this.location = location;
-    this.id = new Date().toString() + Math.random();
+    this.address = location.address;
+    this.location = { lat: location.lat, lng: location.lng };
+    this.id = new Date().toString() + Math.random().toString();
   }
 }

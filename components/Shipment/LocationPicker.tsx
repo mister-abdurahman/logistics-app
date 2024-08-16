@@ -16,11 +16,11 @@ function LocationPicker({
   location,
   setLocation,
 }: {
-  location: { latitude: number; longitude: number; address: string } | null;
+  location: { lat: number; lng: number; address: string } | null;
   setLocation: Dispatch<
     SetStateAction<null | {
-      latitude: number;
-      longitude: number;
+      lat: number;
+      lng: number;
       address: string;
     }>
   >;
@@ -36,8 +36,8 @@ function LocationPicker({
             lon: +mapLon,
           });
           setLocation({
-            latitude: +mapLat,
-            longitude: +mapLon,
+            lat: +mapLat,
+            lng: +mapLon,
             address: address || "",
           });
         }
@@ -57,8 +57,8 @@ function LocationPicker({
       lon: selected_location.coords.longitude,
     });
     setLocation({
-      latitude: selected_location.coords.latitude,
-      longitude: selected_location.coords.longitude,
+      lat: selected_location.coords.latitude,
+      lng: selected_location.coords.longitude,
       address: address || "",
     });
   }
@@ -84,7 +84,10 @@ function LocationPicker({
           <MapView style={styles.map}>
             <Marker
               coordinate={
-                location || {
+                {
+                  latitude: location.lat,
+                  longitude: location.lng,
+                } || {
                   latitude: 0,
                   longitude: 0,
                 }
